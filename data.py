@@ -4,16 +4,33 @@ conditions = ["confirmed", "death", "recovered"]
 
 
 daily_df = pd.read_csv("./data/daily_report.csv")
-global_df = daily_df[["Confirmed", "Deaths", "Recovered"]].sum().reset_index(name="count")
-global_df = global_df.rename(columns={"index": "condition"})
+global_df = (
+    daily_df[["Confirmed", "Deaths", "Recovered"]]
+    .sum()
+    .reset_index(name="count")
+)
+global_df = global_df.rename(
+    columns={"index": "condition"}
+)
 
 print(global_df)
 
 # 나라별로 그룹핑 해보자
 
-country_df = daily_df[["Country_Region", "Confirmed", "Deaths", "Recovered"]]
+country_df = daily_df[
+    [
+        "Country_Region",
+        "Confirmed",
+        "Deaths",
+        "Recovered",
+    ]
+]
 country_df = country_df.groupby("Country_Region")
-country_df = country_df.sum().reset_index()
+country_df = (
+    country_df.sum()
+    .sort_values(by="Confirmed", ascending=False)
+    .reset_index()
+)
 
 for x in country_df.columns:
     print(x)
@@ -21,7 +38,6 @@ for x in country_df.columns:
 for y in country_df.values:
     print(y)
 
-input()
 
 print(country_df)
 
@@ -38,8 +54,22 @@ df
 
 def make_global_df():
     def make_df(condition):
-        df = pd.read_csv(f"./data/time_{condition}.csv")
-        df = df.drop(["Province/State", "Country/Region", "Lat", "Long"], axis=1).sum().reset_index(name=condition)
+        df = pd.read_csv(
+            f"./data/time_{condition}.csv"
+        )
+        df = (
+            df.drop(
+                [
+                    "Province/State",
+                    "Country/Region",
+                    "Lat",
+                    "Long",
+                ],
+                axis=1,
+            )
+            .sum()
+            .reset_index(name=condition)
+        )
         df = df.rename({"index": "date"})
         return df
 
@@ -51,7 +81,9 @@ def make_global_df():
             final_df = condition_df
 
         else:
-            final_df = final_df.merge(condition_df)
+            final_df = final_df.merge(
+                condition_df
+            )
         print(final_df)
 
 
@@ -60,9 +92,22 @@ def make_global_df():
 
 def make_country_df(name):
     def make_df(condition):
-        df = pd.read_csv(f"data/time_{condition}.csv")
+        df = pd.read_csv(
+            f"data/time_{condition}.csv"
+        )
         df = df.loc[df["Country/Region"] == name]
-        df = df.drop(columns=["Province/State", "Country/Region", "Lat", "Long"]).sum().reset_index(name=condition)
+        df = (
+            df.drop(
+                columns=[
+                    "Province/State",
+                    "Country/Region",
+                    "Lat",
+                    "Long",
+                ]
+            )
+            .sum()
+            .reset_index(name=condition)
+        )
         df = df.rename(columns={"index": "date"})
         print(df)
         return df
@@ -75,7 +120,9 @@ def make_country_df(name):
         if final_df is None:
             final_df = condition_df
         else:
-            final_df = final_df.merge(condition_df)
+            final_df = final_df.merge(
+                condition_df
+            )
         print(final_df)
     return final_df
 

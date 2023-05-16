@@ -2,6 +2,7 @@ from dash import Dash, html, dcc
 import plotly.express as px
 import pandas as pd
 from data import country_df
+from builders import make_table
 
 stylesheets = [
     "https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css",
@@ -35,38 +36,7 @@ app.layout = html.Div(
             children=[
                 html.Div(
                     children=[
-                        html.Table(
-                            children=[
-                                html.Thead(
-                                    children=[
-                                        html.Tr(
-                                            children=[
-                                                html.Th(
-                                                    col_name.replace(
-                                                        "_",
-                                                        " ",
-                                                    )
-                                                )
-                                                for col_name in country_df
-                                            ]
-                                        )
-                                    ]
-                                ),
-                                html.Tbody(
-                                    children=[
-                                        html.Tr(
-                                            children=[
-                                                html.Td(
-                                                    value_column
-                                                )
-                                                for value_column in value
-                                            ]
-                                        )
-                                        for value in country_df.values
-                                    ]
-                                ),
-                            ]
-                        )
+                        make_table(country_df)
                     ]
                 )
             ]
