@@ -42,12 +42,12 @@ app.layout = html.Div(
                                         html.Tr(
                                             children=[
                                                 html.Th(
-                                                    col_name.replace(
+                                                    column_name.replace(
                                                         "_",
                                                         " ",
                                                     )
                                                 )
-                                                for col_name in country_df
+                                                for column_name in country_df.columns
                                             ]
                                         )
                                     ]

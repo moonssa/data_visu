@@ -14,6 +14,15 @@ print(global_df)
 country_df = daily_df[["Country_Region", "Confirmed", "Deaths", "Recovered"]]
 country_df = country_df.groupby("Country_Region")
 country_df = country_df.sum().reset_index()
+
+for x in country_df.columns:
+    print(x)
+
+for y in country_df.values:
+    print(y)
+
+input()
+
 print(country_df)
 
 
@@ -30,11 +39,7 @@ df
 def make_global_df():
     def make_df(condition):
         df = pd.read_csv(f"./data/time_{condition}.csv")
-        df = (
-            df.drop(["Province/State", "Country/Region", "Lat", "Long"], axis=1)
-            .sum()
-            .reset_index(name=condition)
-        )
+        df = df.drop(["Province/State", "Country/Region", "Lat", "Long"], axis=1).sum().reset_index(name=condition)
         df = df.rename({"index": "date"})
         return df
 
@@ -57,11 +62,7 @@ def make_country_df(name):
     def make_df(condition):
         df = pd.read_csv(f"data/time_{condition}.csv")
         df = df.loc[df["Country/Region"] == name]
-        df = (
-            df.drop(columns=["Province/State", "Country/Region", "Lat", "Long"])
-            .sum()
-            .reset_index(name=condition)
-        )
+        df = df.drop(columns=["Province/State", "Country/Region", "Lat", "Long"]).sum().reset_index(name=condition)
         df = df.rename(columns={"index": "date"})
         print(df)
         return df
